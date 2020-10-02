@@ -10,7 +10,7 @@ const projectIdValidator = () => {
         try {
             if (req.body.project_id){
                 const found = await dbProjects.get(req.body.project_id);
-                if (found.length){
+                if (found){
                     next();
                 }
                 else {
@@ -37,7 +37,7 @@ actionRouter.get('/', async (req, res) => {
 actionRouter.get('/:id', async (req, res) => {
     try {
         const action = await dbActions.get(req.params.id);
-        if (action.length){
+        if (action){
             res.status(200).json({data: action});
         } else {
             res.status(404).json({errorMessage: "please provide a valid action id"});
@@ -66,7 +66,7 @@ actionRouter.put('/:id', async (req, res) => {
     try {
         if (req.body.description && req.body.notes && req.body.completed){
             const updated = await dbActions.update(req.params.id, req.body);
-            if (updated.length){
+            if (updated){
                 res.status(200).json({data: updated});
             }
             else {
@@ -83,7 +83,7 @@ actionRouter.put('/:id', async (req, res) => {
 actionRouter.delete('/:id', async (req, res) => {
     try {
         const deleted = await dbActions.remove(req.params.id);
-        if (deleted.length){
+        if (deleted){
             res.status(204).json({message: "successfully deleted"});
         } else {
             res.status(400).json({errorMessage: "please provide a valid action id"});

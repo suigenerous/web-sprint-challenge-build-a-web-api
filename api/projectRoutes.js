@@ -30,7 +30,7 @@ projectRouter.get('/:id', async (req, res) => {
 projectRouter.get('/:id/actions', async (req, res) => {
     try {
         const actions = db.getProjectActions(req.params.id);
-        if (actions.length){
+        if (actions){
             res.status(200).json({data: actions});
         } else {
             res.status(404).json({errorMessage: "please provide a valid id"});
@@ -57,7 +57,7 @@ projectRouter.put('/:id', async (req, res) => {
     try {
         if (req.body.name && req.body.description && req.body.completed){
             const updated = await db.insert(req.params.id, req.body);
-            if (updated.length){
+            if (updated){
                 res.status(200).json({data: updated});
             }
             else {
@@ -74,7 +74,7 @@ projectRouter.put('/:id', async (req, res) => {
 projectRouter.delete('/:id', async (req, res) => {
     try {
         const deleted = await db.remove(req.params.id);
-        if (deleted.length){
+        if (deleted){
             res.status(204).json({message: "succesfully deleted"});
         } else {
             res.status(404).json({errorMessage: "please provide a valid id"});
