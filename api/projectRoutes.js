@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('../data/helpers/projectModel');
+const dbActions = require('../data/helpers/actionModel');
 
 const projectRouter = express.Router();
 
@@ -21,6 +22,21 @@ projectRouter.get('/:id', async (req, res) => {
         else {
             res.status(404).json({errorMessage: "please provide a valid id"});
         }
+    } catch {
+        res.status(500).json({errorMessage: "internal server error"});
+    };
+});
+
+projectRouter.get('/:id/actions', async (req, res) => {
+    try {
+        const allActions = await dbActions.get()
+        const filteredActions = allActions.find(act => act.project_id == req.params.id)
+        if (filteredActions.length){
+            res.status(200).json({data: filteredActions});
+        }
+        else {
+            res.status(404).json({errorMessage: 'could not find any actions with that project id'});
+        };
     } catch {
         res.status(500).json({errorMessage: "internal server error"});
     };
@@ -57,7 +73,7 @@ projectRouter.put('/:id', async (req, res) => {
     };
 });
 
-projectRouter.delete('/:d', async (req, res) => {
+projectRouter.delete('/:id', async (req, res) => {
     try {
         const deleted = await db.remove(req.params.id);
         if (deleted.length){
