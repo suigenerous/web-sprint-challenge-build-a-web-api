@@ -1,7 +1,12 @@
 const express = require('express');
+const db = require('../data/helpers/actionModel');
 const actionRouter = express.Router();
 
-actionRouter.get('/api/actions', (res, req) => {
+const idValidator = (res, req, next) => {
+  
+};
+
+actionRouter.get('/', (res, req) => {
 
 });
 
