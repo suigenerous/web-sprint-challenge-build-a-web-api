@@ -16,7 +16,7 @@ projectRouter.get('/', async (req, res) => {
 projectRouter.get('/:id', async (req, res) => {
     try {
         const project = await db.get(req.params.id);
-        if (project.length){
+        if (project){
             res.status(200).json({data: project});
         }
         else {
@@ -29,14 +29,12 @@ projectRouter.get('/:id', async (req, res) => {
 
 projectRouter.get('/:id/actions', async (req, res) => {
     try {
-        const allActions = await dbActions.get()
-        const filteredActions = allActions.find(act => act.project_id == req.params.id)
-        if (filteredActions.length){
-            res.status(200).json({data: filteredActions});
+        const actions = db.getProjectActions(req.params.id);
+        if (actions.length){
+            res.status(200).json({data: actions});
+        } else {
+            res.status(404).json({errorMessage: "please provide a valid id"});
         }
-        else {
-            res.status(404).json({errorMessage: 'could not find any actions with that project id'});
-        };
     } catch {
         res.status(500).json({errorMessage: "internal server error"});
     };
